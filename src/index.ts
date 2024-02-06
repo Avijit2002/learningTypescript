@@ -51,3 +51,23 @@ oneSec(print)
 //5. removeComments:Weather or not to include comments in the final js file
 
 // Add outDir in .gitignore file along with node_modules
+
+
+
+// Assign types to objects - Interfaces
+const user = {
+    name: "avijit",
+    age: 22,
+    id: 2
+}
+interface user{
+    name: string,
+    age:number,
+    id: number
+}
+
+function isEligible(obj:user): boolean {
+    if(obj.age>18) return true
+    else return false
+}
+console.log(isEligible(user))
