@@ -63,8 +63,18 @@ const user = {
 interface user{
     name: string,
     age:number,
-    id: number
+    id: number,
+    email?:string  /// optional field
 }
+
+// function isEligible(obj:{
+//     name: string,
+//     age:number,
+//     id: number
+// }): boolean {
+//     if(obj.age>18) return true
+//     else return false
+// }
 
 function isEligible(obj:user): boolean {
     if(obj.age>18) return true
