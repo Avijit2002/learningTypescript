@@ -182,7 +182,7 @@ enum restrictKey1 {
 }
 function doSomething2(keyPress: restrictKey1) {
     // logic
-    if(keyPress == restrictKey1.up){ // main purpose of enum is we don't use string constants everywahere
+    if (keyPress == restrictKey1.up) { // main purpose of enum is we don't use string constants everywahere
         //
     }
 }
@@ -193,7 +193,7 @@ console.log(restrictKey1.down) // 0
 
 // UseCase of enums in express
 
-const express = require("express")
+import express from "express";
 const app = express()
 
 enum ResponseStatus {
@@ -201,12 +201,12 @@ enum ResponseStatus {
     NotFound = 404,
     Error = 500
 }
-app.get("/", (req:any, res:any) => {
+app.get("/", (req: any, res: any) => {
     if (!req.query.userId) {
-			res.status(ResponseStatus.Error).json({})
+        res.status(ResponseStatus.Error).json({})
     }
     // and so on...
-		res.status(ResponseStatus.Success).json({});
+    res.status(ResponseStatus.Success).json({});
 })
 
 
@@ -215,19 +215,28 @@ app.get("/", (req:any, res:any) => {
 
 // Why????
 
-function firstEl(arr: (string[]|number[])){  // dont do this...use generics
+function firstEl(arr: (string[] | number[])) {  // dont do this...use generics
     return arr[0];
 }
-const value = firstEl([2,3])
+const value = firstEl([2, 3])
 value.toUpperCase() // string method can't be called even if value is string  // Here is the problem ts don't know if the value is string or number...if number then toUpperCase() can't be called
 // this is the perfect example of why to use TS. if JS is used here, JS will allow it. and it will create bug.
 
 
 // Generics enable you to create components that work with any data type while still providing compile-time type safety.
 
-function identity<T>(arg: T): T {  // Now this function works with sny datatype
+function identity<T>(arg: T): T {  // Now this function works with any datatype
     return arg;
-} 
-
+}
 let output1 = identity<string>("myString");   // data type will be passed along with args
-let output2 = identity<number>(100);  // Now ts knows datatype of output 1 and 2
+let output2 = identity<number>(100);  // Now ts knows datatype of output 1 and 2 and it will allow output1 to call string methods
+
+
+function firstEl2<T>(arr: T[]): T {  
+    return arr[0];
+}
+let value2 = firstEl2<string>(['hi','hello']) // if we want that array must only contain string
+// OR
+value2 = firstEl2(['hi','hello'])  // Ts will auto figure-out type
+let value3 = firstEl2([1,2,3])
+value2.toUpperCase()  ///Problem fixed.... now we can call string method
