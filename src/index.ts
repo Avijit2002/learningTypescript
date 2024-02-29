@@ -232,11 +232,85 @@ let output1 = identity<string>("myString");   // data type will be passed along 
 let output2 = identity<number>(100);  // Now ts knows datatype of output 1 and 2 and it will allow output1 to call string methods
 
 
-function firstEl2<T>(arr: T[]): T {  
+function firstEl2<T>(arr: T[]): T {
     return arr[0];
 }
-let value2 = firstEl2<string>(['hi','hello']) // if we want that array must only contain string
+let value2 = firstEl2<string>(['hi', 'hello']) // if we want that array must only contain string
 // OR
-value2 = firstEl2(['hi','hello'])  // Ts will auto figure-out type
-let value3 = firstEl2([1,2,3])
+value2 = firstEl2(['hi', 'hello'])  // Ts will auto figure-out type
+let value3 = firstEl2([1, 2, 3])
 value2.toUpperCase()  ///Problem fixed.... now we can call string method
+
+
+// ADVANCE APIs
+
+// 1- Pick - used to create a subset type/interface from existing type/interface
+
+interface User {
+    readonly id: number,  // readonly studly later
+    name: string,
+    email: string,
+    password: string
+}
+type updateProp = Pick<User, 'name' | 'email'> // usecase : when we want id and password can't be modified
+
+function updateData(data: updateProp) {
+
+}
+// if in future User interface chnages, no need to change in all places
+
+// ------------------------------------------------ //
+
+// 2- Partial - used to create a new type from a exsisting type but all fields optional
+
+type newType = Partial<updateProp>
+// usecase : user wants to update details. sometimes he wants all fields to update but sometimes only few
+
+//-------------------------------------------------- //
+
+// 3- READONLY 
+// usecase : used with config object that stores api keys, endpoints etc
+
+const a = [1, 2, 3]
+a[0] = 5;   // this is a problem, if a is constant so we should not be able to update a
+
+// same for object
+
+// fix
+const b: Readonly<number[]> = [1, 2, 3]
+// b[0] = 6    //error
+
+function fun2(data : Readonly<User>){
+
+}
+
+// ------------------------------------------------------- //
+
+// 4- Record & Map
+
+// Record used to give type to key value pair object
+
+// type User5 = {
+//     [key:string]:{name:string,id:number}
+// }
+
+type User5 = Record<string,{name:string,id:number}>
+
+const user5: User5 = {
+    "23":{name:"avi",id:4}
+}
+
+
+// Map is just another way of creating key value pair object
+const user6 = new Map<string,User>
+
+user6.set("avi",{id:3,name:"avijit",email:"fdfbd",password:"223"})
+user6.delete("avi")
+
+
+
+// Exclude : creates a new type by excluding some fields from existing ones
+
+// Type inference from zod schema
+
+// type finalUserType = z.infer<typeof zodSchema>  // we export types from backend index file and use in frontend
